@@ -51,4 +51,46 @@ public class VehiclesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = newVehicle.Id }, inputVehicle);
     }
 
+    // Actualizar un vehículo existente
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, VehicleDTO updatedVehicle)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var vehicle = await _context.Vehicles.FindAsync(id);
+        if (vehicle == null)
+        {
+            return NotFound();
+        }
+
+        vehicle.Make = updatedVehicle.Make;
+        vehicle.Model = updatedVehicle.Model;
+        vehicle.Year = updatedVehicle.Year;
+        vehicle.Price = updatedVehicle.Price;
+        vehicle.Color = updatedVehicle.Color;
+
+        _context.Vehicles.Update(vehicle);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    // Eliminar un vehículo
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var vehicle = await _context.Vehicles.FindAsync(id);
+        if (vehicle == null)
+        {
+            return NotFound();
+        }
+
+        _context.Vehicles.Remove(vehicle);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
