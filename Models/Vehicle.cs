@@ -12,10 +12,10 @@ public class Vehicle
     public int Id { get; set; }
 
     [Column("make")]
-    public required string Make { get; set; }
+    public string Make { get; set; }
 
     [Column("model")]
-    public required string Model { get; set; }
+    public string Model { get; set; }
 
     [Column("year")]
     public int Year { get; set; }
@@ -24,5 +24,15 @@ public class Vehicle
     public double Price { get; set; }
 
     [Column("color")]
-    public required string Color { get; set; }
+    public string Color { get; set; }
+
+
+    public Vehicle(string make, string model, int year, double price, string color)
+    {
+        Make = make;
+        Model = model;
+        Year = year;
+        Price = price;
+        Color = color;
+    }
 }
