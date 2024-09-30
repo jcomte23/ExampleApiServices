@@ -1,5 +1,8 @@
 using DotNetEnv;
 using ExampleApiServices.Data;
+using ExampleApiServices.Models;
+using ExampleApiServices.Repositories;
+using ExampleApiServices.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -20,6 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.Parse("8.0.20-mysql")));
 builder.Services.AddControllers();
+builder.Services.AddScoped<IVehicleRepository, VehicleServices>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

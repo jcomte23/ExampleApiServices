@@ -1,6 +1,7 @@
 using ExampleApiServices.Data;
 using ExampleApiServices.DTOs;
 using ExampleApiServices.Models;
+using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleApiServices.Controllers.V1.Vehicles;
@@ -9,11 +10,11 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 [Route("api/v1/[controller]")]
 public class VehiclesCreateController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public VehiclesCreateController(ApplicationDbContext context)
+    public VehiclesCreateController(IVehicleRepository vehicleRepository)
     {
-        _context = context;
+        _vehicleRepository = vehicleRepository;
     }
 
     [HttpPost]
@@ -25,10 +26,9 @@ public class VehiclesCreateController : ControllerBase
         }
 
         var newVehicle = new Vehicle(inputVehicle.Make, inputVehicle.Model, inputVehicle.Year, inputVehicle.Price, inputVehicle.Color);
+       
+        await _vehicleRepository.Add(newVehicle);
 
-        _context.Vehicles.Add(newVehicle);
-        await _context.SaveChangesAsync();
         return Ok(newVehicle);
-        // return CreatedAtAction(nameof(GetById), new { id = newVehicle.Id }, inputVehicle);
     }
 }
