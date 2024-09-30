@@ -35,59 +35,25 @@ public class VehiclesController : ControllerBase
         return vehicle;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Vehicle>> Create(VehicleDTO inputVehicle)
+    [HttpGet("search/{keyword}")]
+    public async Task<ActionResult<IEnumerable<Vehicle>>> SearchByKeyword(string keyword)
     {
-        if (!ModelState.IsValid)
+        if (string.IsNullOrWhiteSpace(keyword))
         {
-            return BadRequest(ModelState);
+            return BadRequest("La palabra clave no puede estar vacía.");
         }
 
-        var newVehicle = new Vehicle(inputVehicle.Make, inputVehicle.Model, inputVehicle.Year, inputVehicle.Price, inputVehicle.Color);
+        var vehicles = await _context.Vehicles
+            .Where(v => v.Make.Contains(keyword) ||
+                        v.Model.Contains(keyword) ||
+                        v.Color.Contains(keyword))
+            .ToListAsync();
 
-        _context.Vehicles.Add(newVehicle);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new { id = newVehicle.Id }, inputVehicle);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, VehicleDTO updatedVehicle)
-    {
-        if (!ModelState.IsValid)
+        if (!vehicles.Any())
         {
-            return BadRequest(ModelState);
+            return NotFound("No se encontraron vehículos que coincidan con la palabra clave proporcionada.");
         }
 
-        var vehicle = await _context.Vehicles.FindAsync(id);
-        if (vehicle == null)
-        {
-            return NotFound();
-        }
-
-        vehicle.Make = updatedVehicle.Make;
-        vehicle.Model = updatedVehicle.Model;
-        vehicle.Year = updatedVehicle.Year;
-        vehicle.Price = updatedVehicle.Price;
-        vehicle.Color = updatedVehicle.Color;
-
-        _context.Vehicles.Update(vehicle);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var vehicle = await _context.Vehicles.FindAsync(id);
-        if (vehicle == null)
-        {
-            return NotFound();
-        }
-
-        _context.Vehicles.Remove(vehicle);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
+        return Ok(vehicles);
     }
 }
