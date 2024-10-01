@@ -1,4 +1,5 @@
 using DotNetEnv;
+using ExampleApiServices.Config;
 using ExampleApiServices.Data;
 using ExampleApiServices.Models;
 using ExampleApiServices.Repositories;
@@ -33,6 +34,8 @@ builder.Services.AddSwaggerGen(c =>
         Title = "Vehicles",
         Version = "V1"
     });
+
+    c.DocumentFilter<CustomOperationOrderingFilter>();
 });
 
 var app = builder.Build();
