@@ -9,15 +9,8 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 [Route("api/v1/vehicles")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("vehicles")]
-public class VehiclesUpdateController : ControllerBase
+public class VehiclesUpdateController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-    private readonly IVehicleRepository _vehicleRepository;
-
-    public VehiclesUpdateController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, VehicleDTO updatedVehicle)
     {

@@ -10,15 +10,8 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 [Route("api/v1/vehicles")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("vehicles")]
-public class VehiclesCreateController : ControllerBase
+public class VehiclesCreateController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-    private readonly IVehicleRepository _vehicleRepository;
-
-    public VehiclesCreateController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
-
     [HttpPost]
     public async Task<ActionResult<Vehicle>> Create(VehicleDTO inputVehicle)
     {

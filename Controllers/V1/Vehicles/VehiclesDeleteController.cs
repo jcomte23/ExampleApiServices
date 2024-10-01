@@ -8,15 +8,8 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 [Route("api/v1/vehicles")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("vehicles")]
-public class VehiclesDeleteController : ControllerBase
+public class VehiclesDeleteController(IVehicleRepository vehicleRepository) : VehiclesController(vehicleRepository)
 {
-    private readonly IVehicleRepository _vehicleRepository;
-
-    public VehiclesDeleteController(IVehicleRepository vehicleRepository)
-    {
-        _vehicleRepository = vehicleRepository;
-    }
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
