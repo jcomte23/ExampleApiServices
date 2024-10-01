@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ExampleApiServices.DTOs;
+namespace ExampleApiServices.DTOs.Requests;
 
 public class VehicleDTO
 {

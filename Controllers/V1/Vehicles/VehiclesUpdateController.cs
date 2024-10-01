@@ -1,5 +1,6 @@
 using ExampleApiServices.Data;
 using ExampleApiServices.DTOs;
+using ExampleApiServices.DTOs.Requests;
 using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
