@@ -56,7 +56,7 @@ public class VehicleServices : IVehicleRepository
     public async Task Delete(int id)
     {
         var vehicle = await _context.Vehicles.FindAsync(id);
-        if (vehicle!= null)
+        if (vehicle != null)
         {
             _context.Vehicles.Remove(vehicle);
             await _context.SaveChangesAsync();
@@ -71,6 +71,19 @@ public class VehicleServices : IVehicleRepository
     public async Task<Vehicle?> GetById(int id)
     {
         return await _context.Vehicles.FindAsync(id);
+    }
+
+    public async Task<IEnumerable<Vehicle>> GetByKeyword(string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+        {
+            return await GetAll();
+        }
+
+        return await _context.Vehicles.Where(
+            v => v.Make.Contains(keyword) || 
+            v.Model.Contains(keyword) || 
+            v.Color.Contains(keyword)).ToListAsync();
     }
 
     public async Task Update(Vehicle vehicle)

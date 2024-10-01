@@ -1,6 +1,7 @@
 using ExampleApiServices.Data;
 using ExampleApiServices.DTOs;
 using ExampleApiServices.Models;
+using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -11,23 +12,25 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 [Route("api/v1/[controller]")]
 public class VehiclesGetController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public VehiclesGetController(ApplicationDbContext context)
+    public VehiclesGetController(IVehicleRepository vehicleRepository)
     {
-        _context = context;
+        _vehicleRepository = vehicleRepository;
     }
+
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Vehicle>>> GetAll()
     {
-        return await _context.Vehicles.ToListAsync();
+        var vehicles = await _vehicleRepository.GetAll();
+        return Ok(vehicles);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Vehicle>> GetById(int id)
     {
-        var vehicle = await _context.Vehicles.FindAsync(id);
+        var vehicle = await _vehicleRepository.GetById(id);
         if (vehicle == null)
         {
             return NotFound();
@@ -43,11 +46,7 @@ public class VehiclesGetController : ControllerBase
             return BadRequest("La palabra clave no puede estar vacía.");
         }
 
-        var vehicles = await _context.Vehicles
-            .Where(v => v.Make.Contains(keyword) ||
-                        v.Model.Contains(keyword) ||
-                        v.Color.Contains(keyword))
-            .ToListAsync();
+        var vehicles = await _vehicleRepository.GetByKeyword(keyword);
 
         if (!vehicles.Any())
         {
