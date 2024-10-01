@@ -4,6 +4,7 @@ using ExampleApiServices.Models;
 using ExampleApiServices.Repositories;
 using ExampleApiServices.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 
 Env.Load();
@@ -25,7 +26,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<IVehicleRepository, VehicleServices>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Vehicles",
+        Version = "V1"
+    });
+});
 
 var app = builder.Build();
 
@@ -33,7 +41,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(
+        options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Version 1");
+            options.SwaggerEndpoint("/swagger/v2/swagger.json", "Version 2");
+        }
+    );
 }
 
 app.UseHttpsRedirection();

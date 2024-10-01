@@ -9,7 +9,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/vehicles")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("vehicles")]
 public class VehiclesGetController : ControllerBase
 {
     private readonly IVehicleRepository _vehicleRepository;

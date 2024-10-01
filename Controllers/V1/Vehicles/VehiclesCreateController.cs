@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExampleApiServices.Controllers.V1.Vehicles;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/vehicles")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("vehicles")]
 public class VehiclesCreateController : ControllerBase
 {
     private readonly IVehicleRepository _vehicleRepository;
@@ -26,7 +28,7 @@ public class VehiclesCreateController : ControllerBase
         }
 
         var newVehicle = new Vehicle(inputVehicle.Make, inputVehicle.Model, inputVehicle.Year, inputVehicle.Price, inputVehicle.Color);
-       
+
         await _vehicleRepository.Add(newVehicle);
 
         return Ok(newVehicle);
