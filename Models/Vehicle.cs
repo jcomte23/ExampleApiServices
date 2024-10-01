@@ -29,10 +29,10 @@ public class Vehicle
 
     public Vehicle(string make, string model, int year, double price, string color)
     {
-        Make = make;
-        Model = model;
+        Make = make.ToLower().Trim();
+        Model = model.ToLower().Trim();
         Year = year;
         Price = price;
-        Color = color;
+        Color = color.ToLower().Trim();
     }
 }

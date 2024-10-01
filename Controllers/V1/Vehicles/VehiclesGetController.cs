@@ -9,11 +9,11 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class VehiclesController : ControllerBase
+public class VehiclesGetController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
 
-    public VehiclesController(ApplicationDbContext context)
+    public VehiclesGetController(ApplicationDbContext context)
     {
         _context = context;
     }

@@ -51,7 +51,7 @@ public class VehicleServices : IVehicleRepository
         throw new NotImplementedException();
     }
 
-    public Task Update(Vehicle student)
+    public Task Update(Vehicle vehicle)
     {
         throw new NotImplementedException();
     }
