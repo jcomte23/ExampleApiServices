@@ -1,4 +1,5 @@
 using ExampleApiServices.Data;
+using ExampleApiServices.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleApiServices.Controllers.V1.Vehicles;
@@ -7,24 +8,23 @@ namespace ExampleApiServices.Controllers.V1.Vehicles;
 [Route("api/v1/[controller]")]
 public class VehiclesDeleteController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public VehiclesDeleteController(ApplicationDbContext context)
+    public VehiclesDeleteController(IVehicleRepository vehicleRepository)
     {
-        _context = context;
+        _vehicleRepository = vehicleRepository;
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var vehicle = await _context.Vehicles.FindAsync(id);
-        if (vehicle == null)
+        var vehicle = await _vehicleRepository.CheckExistence(id);
+        if (vehicle == false)
         {
             return NotFound();
         }
 
-        _context.Vehicles.Remove(vehicle);
-        await _context.SaveChangesAsync();
+        await _vehicleRepository.Delete(id);
 
         return NoContent();
     }

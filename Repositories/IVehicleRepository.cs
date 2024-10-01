@@ -7,5 +7,6 @@ public interface IVehicleRepository
     Task<Vehicle?> GetById(int id);
     Task Add(Vehicle vehicle);
     Task Update(Vehicle vehicle);
+    Task Delete(int id);
     Task<bool> CheckExistence(int id);
 }
